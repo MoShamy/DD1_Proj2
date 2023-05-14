@@ -1,8 +1,15 @@
 
-module Multiplier( input [7:0] multiplicand, input [7:0] multiplier, input  start, input clk, 
-output reg [15:0] product, output [3:0] count, output done);
+module Multiplier( 
+input [7:0] multiplicand,
+input [7:0] multiplier,
+input  start,
+input clk, 
+output reg [15:0] product,
+output done
+  );
 wire [15:0] w1; //multiplicand 
 wire [7:0] w2;  //multiplier
+wire [3:0] count;
 reg d;
 
 shift_left_register cand ( {8'b0,multiplicand} , start, clk, w1);  //start -> enable WE NEED TO CHANGE THE CLOCK
