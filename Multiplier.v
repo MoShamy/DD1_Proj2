@@ -47,10 +47,7 @@ begin
     
          
                 end
-    if(done) begin
-    if(sign)
-        product = ~product + 1'b1;
-        end
+
 end
 
 

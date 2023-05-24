@@ -2,6 +2,7 @@ module seg7(
 
     input clk,
     input start,
+    input sign,
     input SL,
     input SR,
     input  [15:0] sw,
@@ -21,9 +22,8 @@ module seg7(
     reg [3:0] temp;
     reg [19:0] refrsh; 
     wire [1:0] ledEN; 
-    wire [3:0] sign;
      
-    assign sign = 4'b1011;
+    
                 
     always @(posedge clk ) 
     
@@ -48,7 +48,7 @@ module seg7(
     end 
     assign ledEN = refrsh[19:18];
     
-   
+   reg [3:0] x0,x1,x2,x3,x4;
     //array of all the Ds to play with 
     always @(posedge start or posedge SL or posedge SR)begin
     if(start) begin
@@ -57,22 +57,21 @@ module seg7(
          d2 = ((numb % 10000)%1000)/100;
          d3 = (((numb % 10000)%1000)%100)/10;
          d4 = (((numb%10000)%1000)%100)%10;
+         
+         x0 = d1;
+         x1=d2;
+         x2=d3;
+
     end else if(SR) begin
  
-        temp = d4;
-        d4 = d3;
-        d3 = d2;
-        d2 = d1;
-        d1 = d0;
-        d0 = temp;
+   x0 = d0;
+   x1 = d1;
+   x2 = d2;
      end else if(SL) begin
     
-        temp = d0;
-        d0 = d1;
-        d1 = d2;
-        d2 = d3;
-        d3 = d4;
-        d4= temp;
+       x0 = d2;
+       x1 = d3;
+       x2 = d4;
     end  
     
     
@@ -84,19 +83,20 @@ module seg7(
         case(ledEN)
         2'b00: begin
             AN = 4'b0111; 
-            BCD = sign;
+            BCD = (sign) ? 4'b1011: 4'b1010;
+    
               end
         2'b01: begin
             AN = 4'b1011; 
-            BCD = d0;
+            BCD = x0;
               end
         2'b10: begin
             AN = 4'b1101; 
-            BCD = d1;
+            BCD = x1;
                 end
         2'b11: begin
             AN = 4'b1110; 
-            BCD = d2;
+            BCD = x2;
                end
         endcase
     end
@@ -114,7 +114,8 @@ module seg7(
         4'b0111: ledSEG = 7'b0001111;
         4'b1000: ledSEG = 7'b0000000;  
         4'b1001: ledSEG = 7'b0000100;
-        4'b1011: ledSEG = 7'b1111110; 
+        4'b1011: ledSEG = 7'b1111110;  //neg sign
+        4'b1010: ledSEG = 7'b1111111;   // empty
         default: ledSEG = 7'b0000001; 
         endcase
     end

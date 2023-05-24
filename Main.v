@@ -16,14 +16,15 @@ output done
     wire [15:0] product;
     wire [3:0] AN;
     wire [6:0] ledSEG;
+    wire sign;
     
      
      pushDetect pbStart(start,clk,rst,start_out);
      pushDetect pbSL (SL,clk,rst,SL_out);
      pushDetect pbSR (SR,clk,rst,SR_out);
      
-     Multiplier mult(plicand,pliar,start,clk,product,done);
-     seg7 seg7(clk,start_out, SL_out, SR_out, product,AN,ledSEG);
+     Multiplier mult(plicand,pliar,start,clk,product,done,sign);
+     seg7 seg7(clk,start_out,sign, SL_out, SR_out, product,AN,ledSEG);
      
      
 endmodule
