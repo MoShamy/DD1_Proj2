@@ -1,17 +1,16 @@
+/* The main module combines all other modules together and this is the one to be simulated and implemented */
 
 module Main(
-input [7:0] plicand,
-input [7:0] pliar,
-input start,
-input clk,
-input SL,
-input SR,
-output reg [3:0] AN, 
-output reg [6:0] ledSEG,
-output done
-    );
-    
-    
+    input clk,
+    input start,
+    input [7:0] plicand,
+    input [7:0] pliar,
+    input SL,
+    input SR,
+    output reg [3:0] AN, 
+    output reg [6:0] ledSEG,
+    output done
+);
     wire clk_out,SL_out,SR_out;
     wire [15:0] product;
     wire [3:0] AN;
@@ -19,12 +18,10 @@ output done
     wire sign;
     
      
-     pushDetect pbStart(start,clk,rst,start_out);
-     pushDetect pbSL (SL,clk,rst,SL_out);
-     pushDetect pbSR (SR,clk,rst,SR_out);
-     
-     Multiplier mult(plicand,pliar,start,clk,product,done,sign);
-     seg7 seg7(clk,start_out,sign, SL_out, SR_out, product,AN,ledSEG);
-     
-     
+    pushDetect pbStart(.a(start), .clk(clk), .rst(rst), .z(start_out));
+    pushDetect pbSL (.a(SL), .clk(clk), .rst(rst), .z(SL_out));
+    pushDetect pbSR (.a(SR), .clk(clk), .rst(rst), .z(SR_out));
+    Multiplier mult(.multiplicand(plicand), .multiplier(pliar), .start(start), .c;l(clk), .product(product), .done(done), .sign(sign));
+    seg7 seg7(.clk(clk), .start(start_out), .sign(sign), .SL(SL_out), .SR(SR_out), .sw(product), .AN(AN), .ledSEG(ledSEG));
+
 endmodule

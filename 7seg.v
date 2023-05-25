@@ -10,8 +10,8 @@ module seg7(
     input clk,
     input start,
     input sign,
-    input SL,                //shift_left
-    input SR,               //shift_right
+    input SL,              //shift_left
+    input SR,              //shift_right
     input  [15:0] sw,      //product of multiplication 
     output reg [3:0] AN, 
     output reg [6:0] ledSEG
@@ -38,7 +38,7 @@ module seg7(
             if(secCount>=99999999) 
                  secCount <= 27'b0;
             else
-                secCount <= secCount + 1'b1;
+                 secCount <= secCount + 1'b1;
         end
     end 
     
@@ -46,13 +46,13 @@ module seg7(
 
     always @(posedge clk )
     begin
-       if(secENAB == 1)
+        if(secENAB == 1)
             numb <= sw;
     end
 
     always @(posedge clk)
     begin 
-       refrsh <= refrsh +1'b1;
+        refrsh <= refrsh +1'b1;
     end 
 
 
@@ -122,10 +122,8 @@ module seg7(
         4'b1000: ledSEG = 7'b0000000;  
         4'b1001: ledSEG = 7'b0000100;
         4'b1011: ledSEG = 7'b1111110;  //neg sign
-        4'b1010: ledSEG = 7'b1111111;  // empty (No signs)
+        4'b1010: ledSEG = 7'b1111111;  //empty (No signs)
         default: ledSEG = 7'b0000001; 
         endcase
     end
  endmodule
-
-
